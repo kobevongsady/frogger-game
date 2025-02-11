@@ -10,7 +10,7 @@ const frogWidth = 30;
 const frogHeight = 30;
 const laneHeight = 50;
 let frogX = canvas.width / 2 - frogWidth / 2;
-let frogY = canvas.height - frogHeight - 50;  // Starting at the bottom of the screen
+let frogY = 0;  // Start at the top of the screen (height = 0)
 let frogSpeed = 40;
 let isGameOver = false;
 let lanes = [];
