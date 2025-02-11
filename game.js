@@ -34,14 +34,22 @@ function drawFrog() {
 
 // Draw the lanes and cars
 function drawLanes() {
-  lanes.forEach(lane => {
-    ctx.fillStyle = "#ff4500";
-    ctx.fillRect(0, lane.y, canvas.width, laneHeight);
-    // Draw the car moving on the lane
-    ctx.fillStyle = "#ff0000";
-    ctx.fillRect(lane.x, lane.y + laneHeight / 3, 60, 30); // Car moves horizontally
-  });
-}
+    lanes.forEach((lane, index) => {
+      // Draw the street (the background color for the lane)
+      ctx.fillStyle = "#808080";  // Grey street color
+      ctx.fillRect(0, lane.y, canvas.width, laneHeight);  // Street is drawn for each lane
+  
+      // Draw the lane (the dividing lines or white part of the lane)
+      ctx.fillStyle = "#FFFFFF";  // White for lane dividing lines
+      ctx.fillRect(0, lane.y + laneHeight / 2 - 5, canvas.width, 10); // White line in the middle of the lane
+  
+      // Draw the car on the lane
+      // Alternate between red and blue cars based on the lane index
+      ctx.fillStyle = index % 2 === 0 ? "#ff0000" : "#0000ff";  // Red car for even lanes, Blue for odd lanes
+      ctx.fillRect(lane.x, lane.y + laneHeight / 3, 60, 30); // Car size: 60x30
+    });
+  }
+  
 
 // Move the frog based on keypress
 function moveFrog(e) {
