@@ -36,7 +36,7 @@ function drawFrog() {
 function drawLanes() {
     lanes.forEach((lane, index) => {
       // Draw the street (the background color for the lane)
-      ctx.fillStyle = "#000000";  // Black street color
+      ctx.fillStyle = "#d3d3d3";  // Light grey street color
       ctx.fillRect(0, lane.y, canvas.width, laneHeight);  // Street is drawn for each lane
   
       // Draw the lane (the dividing lines or white part of the lane)
