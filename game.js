@@ -19,11 +19,11 @@ let lanes = [];
 // Define game objects and initialize
 function init() {
   lanes = [
-    { y: 50, speed: 2, direction: 1 },   // Lane 1 (cars moving right)
-    { y: 100, speed: 2, direction: -1 },  // Lane 2 (cars moving left)
-    { y: 150, speed: 2.5, direction: 1 }, // Lane 3
-    { y: 200, speed: 3, direction: -1 },  // Lane 4
-    { y: 250, speed: 3, direction: 1 },   // Lane 5
+    { y: 50, speed: 1, direction: 1 },   // Lane 1 (cars moving right)
+    { y: 100, speed: 1, direction: -1 },  // Lane 2 (cars moving left)
+    { y: 150, speed: 1.5, direction: 1 }, // Lane 3 (cars moving right)
+    { y: 200, speed: 2, direction: -1 },  // Lane 4 (cars moving left)
+    { y: 250, speed: 2, direction: 1 },   // Lane 5 (cars moving right)
   ];
 }
 
@@ -66,8 +66,14 @@ function moveFrog(e) {
 // Check if the frog is in collision with a car
 function checkCollision() {
   lanes.forEach(lane => {
+    console.log('Frog position:', frogX, frogY);
+    console.log('Lane position:', lane.y);
+    
+    // Check if frog is in the same vertical range as a lane
     if (frogY < lane.y + laneHeight && frogY + frogHeight > lane.y) {
+      // Check if frog is colliding with the car
       if (frogX + frogWidth > lane.y && frogX < lane.y + 60) {
+        console.log("Collision detected");
         isGameOver = true;
       }
     }
@@ -81,9 +87,9 @@ function draw() {
     ctx.fillStyle = "red";
     ctx.font = "30px Arial";
     ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2);
-    return;
+    return; // Stop the game from drawing anything else
   }
-  
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawFrog();
   drawLanes();
