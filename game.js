@@ -10,9 +10,10 @@ const frogWidth = 30;
 const frogHeight = 30;
 const laneHeight = 50;
 let frogX = canvas.width / 2 - frogWidth / 2;
-let frogY = 0;  // Start at the top of the screen (height = 0)
+let frogY = canvas.height - frogHeight - 10;  // Start at the bottom of the screen
 let frogSpeed = 40;
 let isGameOver = false;
+let isWin = false;
 let lanes = [];
 
 // Define game objects and initialize
@@ -23,6 +24,15 @@ function init() {
     { y: 150, x: 0, speed: 1.5, direction: 1 }, // Lane 3 (cars moving right)
     { y: 200, x: canvas.width, speed: 2, direction: -1 },  // Lane 4 (cars moving left)
     { y: 250, x: 0, speed: 2, direction: 1 },   // Lane 5 (cars moving right)
+    { y: 300, x: canvas.width, speed: 1.2, direction: -1 },  // Lane 6 (cars moving left)
+    { y: 350, x: 0, speed: 1.8, direction: 1 }, // Lane 7 (cars moving right)
+    { y: 400, x: canvas.width, speed: 2.3, direction: -1 },  // Lane 8 (cars moving left)
+    { y: 450, x: 0, speed: 2.5, direction: 1 }, // Lane 9 (cars moving right)
+    { y: 500, x: canvas.width, speed: 1.6, direction: -1 },  // Lane 10 (cars moving left)
+    { y: 550, x: 0, speed: 1.9, direction: 1 }, // Lane 11 (cars moving right)
+    { y: 600, x: canvas.width, speed: 2.2, direction: -1 },  // Lane 12 (cars moving left)
+    { y: 650, x: 0, speed: 1.4, direction: 1 }, // Lane 13 (cars moving right)
+    { y: 700, x: canvas.width, speed: 2.0, direction: -1 },  // Lane 14 (cars moving left)
   ];
 }
 
@@ -51,7 +61,7 @@ function drawLanes() {
 
 // Move the frog based on keypress
 function moveFrog(e) {
-  if (isGameOver) return;
+  if (isGameOver || isWin) return;
   switch (e.key) {
     case "ArrowUp":
       if (frogY > 0) frogY -= frogSpeed;
@@ -81,6 +91,13 @@ function checkCollision() {
   });
 }
 
+// Check if the frog has reached the top of the screen
+function checkWin() {
+  if (frogY <= 0) {
+    isWin = true;
+  }
+}
+
 // Draw the game
 function draw() {
   if (isGameOver) {
@@ -88,6 +105,14 @@ function draw() {
     ctx.fillStyle = "red";
     ctx.font = "30px Arial";
     ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2);
+    return; // Stop the game from drawing anything else
+  }
+
+  if (isWin) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "green";
+    ctx.font = "30px Arial";
+    ctx.fillText("You Win!", canvas.width / 2 - 75, canvas.height / 2);
     return; // Stop the game from drawing anything else
   }
 
@@ -101,6 +126,9 @@ function draw() {
 
   // Check for collisions
   checkCollision();
+
+  // Check for win condition
+  checkWin();
 
   // Update lane positions (cars moving horizontally)
   lanes.forEach(lane => {
