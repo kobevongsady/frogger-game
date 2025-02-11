@@ -8,7 +8,6 @@ canvas.height = 320;
 // Define game variables
 const frogWidth = 30;
 const frogHeight = 30;
-const roadHeight = 100;
 const laneHeight = 50;
 let frogX = canvas.width / 2 - frogWidth / 2;
 let frogY = canvas.height - frogHeight - 10;
@@ -19,11 +18,11 @@ let lanes = [];
 // Define game objects and initialize
 function init() {
   lanes = [
-    { y: 50, speed: 1, direction: 1 },   // Lane 1 (cars moving right)
-    { y: 100, speed: 1, direction: -1 },  // Lane 2 (cars moving left)
-    { y: 150, speed: 1.5, direction: 1 }, // Lane 3 (cars moving right)
-    { y: 200, speed: 2, direction: -1 },  // Lane 4 (cars moving left)
-    { y: 250, speed: 2, direction: 1 },   // Lane 5 (cars moving right)
+    { y: 50, x: 0, speed: 1, direction: 1 },   // Lane 1 (cars moving right)
+    { y: 100, x: canvas.width, speed: 1, direction: -1 },  // Lane 2 (cars moving left)
+    { y: 150, x: 0, speed: 1.5, direction: 1 }, // Lane 3 (cars moving right)
+    { y: 200, x: canvas.width, speed: 2, direction: -1 },  // Lane 4 (cars moving left)
+    { y: 250, x: 0, speed: 2, direction: 1 },   // Lane 5 (cars moving right)
   ];
 }
 
@@ -40,7 +39,7 @@ function drawLanes() {
     ctx.fillRect(0, lane.y, canvas.width, laneHeight);
     // Draw the car moving on the lane
     ctx.fillStyle = "#ff0000";
-    ctx.fillRect(lane.direction === 1 ? lane.y : canvas.width - 60, lane.y + laneHeight / 3, 60, 30);
+    ctx.fillRect(lane.x, lane.y + laneHeight / 3, 60, 30); // Draw the car horizontally moving
   });
 }
 
@@ -66,15 +65,11 @@ function moveFrog(e) {
 // Check if the frog is in collision with a car
 function checkCollision() {
   lanes.forEach(lane => {
-    console.log('Frog position:', frogX, frogY);
-    console.log('Lane position:', lane.y);
-    
     // Check if frog is in the same vertical range as a lane
     if (frogY < lane.y + laneHeight && frogY + frogHeight > lane.y) {
       // Check if frog is colliding with the car
-      if (frogX + frogWidth > lane.y && frogX < lane.y + 60) {
-        console.log("Collision detected");
-        isGameOver = true;
+      if (frogX + frogWidth > lane.x && frogX < lane.x + 60) {
+        isGameOver = true; // If collision happens, game over
       }
     }
   });
@@ -95,11 +90,13 @@ function draw() {
   drawLanes();
   checkCollision();
 
-  // Update lane position
+  // Update lane positions (cars moving horizontally)
   lanes.forEach(lane => {
-    lane.y += lane.speed * lane.direction;
-    if (lane.y > canvas.height) {
-      lane.y = -laneHeight;
+    lane.x += lane.speed * lane.direction;
+    if (lane.x > canvas.width) {
+      lane.x = -60; // Reset car position to the left side of the screen
+    } else if (lane.x < -60) {
+      lane.x = canvas.width; // Reset car position to the right side of the screen
     }
   });
 
