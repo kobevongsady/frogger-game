@@ -10,7 +10,7 @@ const frogWidth = 30;
 const frogHeight = 30;
 const laneHeight = 50;
 let frogX = canvas.width / 2 - frogWidth / 2;
-let frogY = canvas.height - frogHeight - 10;
+let frogY = canvas.height - frogHeight - 10;  // Starting at the bottom of the screen
 let frogSpeed = 40;
 let isGameOver = false;
 let lanes = [];
@@ -39,7 +39,7 @@ function drawLanes() {
     ctx.fillRect(0, lane.y, canvas.width, laneHeight);
     // Draw the car moving on the lane
     ctx.fillStyle = "#ff0000";
-    ctx.fillRect(lane.x, lane.y + laneHeight / 3, 60, 30); // Draw the car horizontally moving
+    ctx.fillRect(lane.x, lane.y + laneHeight / 3, 60, 30); // Car moves horizontally
   });
 }
 
@@ -65,11 +65,16 @@ function moveFrog(e) {
 // Check if the frog is in collision with a car
 function checkCollision() {
   lanes.forEach(lane => {
+    // Log the positions for debugging
+    console.log('Frog Position:', frogX, frogY);
+    console.log('Lane Position:', lane.x, lane.y);
+
     // Check if frog is in the same vertical range as a lane
     if (frogY < lane.y + laneHeight && frogY + frogHeight > lane.y) {
-      // Check if frog is colliding with the car
+      // Check if frog is colliding with the car horizontally
       if (frogX + frogWidth > lane.x && frogX < lane.x + 60) {
-        isGameOver = true; // If collision happens, game over
+        console.log("Collision detected");
+        isGameOver = true;
       }
     }
   });
@@ -94,9 +99,9 @@ function draw() {
   lanes.forEach(lane => {
     lane.x += lane.speed * lane.direction;
     if (lane.x > canvas.width) {
-      lane.x = -60; // Reset car position to the left side of the screen
+      lane.x = -60; // Reset car to the left side of the screen
     } else if (lane.x < -60) {
-      lane.x = canvas.width; // Reset car position to the right side of the screen
+      lane.x = canvas.width; // Reset car to the right side of the screen
     }
   });
 
