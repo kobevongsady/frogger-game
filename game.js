@@ -28,28 +28,26 @@ function init() {
 
 // Draw the frog on the canvas
 function drawFrog() {
-  ctx.fillStyle = "#0f0";
+  ctx.fillStyle = "#0f0"; // Green frog
   ctx.fillRect(frogX, frogY, frogWidth, frogHeight);
 }
 
 // Draw the lanes and cars
 function drawLanes() {
-    lanes.forEach((lane, index) => {
-      // Draw the street (the background color for the lane)
-      ctx.fillStyle = "#d3d3d3";  // Light grey street color
-      ctx.fillRect(0, lane.y, canvas.width, laneHeight);  // Street is drawn for each lane
+  lanes.forEach((lane, index) => {
+    // Draw the street (background color for the lane)
+    ctx.fillStyle = "#d3d3d3";  // Light grey street color
+    ctx.fillRect(0, lane.y, canvas.width, laneHeight);  // Street is drawn for each lane
   
-      // Draw the lane (the dividing lines or white part of the lane)
-      ctx.fillStyle = "#FFFFFF";  // White for lane dividing lines
-      ctx.fillRect(0, lane.y + laneHeight / 2 - 5, canvas.width, 10); // White line in the middle of the lane
+    // Draw the lane (the dividing lines or white part of the lane)
+    ctx.fillStyle = "#FFFFFF";  // White for lane dividing lines
+    ctx.fillRect(0, lane.y + laneHeight / 2 - 5, canvas.width, 10); // White line in the middle of the lane
   
-      // Draw the car on the lane
-      // Alternate between red and blue cars based on the lane index
-      ctx.fillStyle = index % 2 === 0 ? "#ff0000" : "#0000ff";  // Red car for even lanes, Blue for odd lanes
-      ctx.fillRect(lane.x, lane.y + laneHeight / 3, 60, 30); // Car size: 60x30
-    });
-  }
-  
+    // Draw the car on the lane
+    ctx.fillStyle = index % 2 === 0 ? "#ff0000" : "#0000ff";  // Red car for even lanes, Blue for odd lanes
+    ctx.fillRect(lane.x, lane.y + laneHeight / 3, 60, 30); // Car size: 60x30
+  });
+}
 
 // Move the frog based on keypress
 function moveFrog(e) {
@@ -73,15 +71,10 @@ function moveFrog(e) {
 // Check if the frog is in collision with a car
 function checkCollision() {
   lanes.forEach(lane => {
-    // Log the positions for debugging
-    console.log('Frog Position:', frogX, frogY);
-    console.log('Lane Position:', lane.x, lane.y);
-
     // Check if frog is in the same vertical range as a lane
     if (frogY < lane.y + laneHeight && frogY + frogHeight > lane.y) {
       // Check if frog is colliding with the car horizontally
       if (frogX + frogWidth > lane.x && frogX < lane.x + 60) {
-        console.log("Collision detected");
         isGameOver = true;
       }
     }
@@ -99,8 +92,14 @@ function draw() {
   }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawFrog();
+
+  // First, draw the lanes and cars
   drawLanes();
+
+  // Then, draw the frog (make sure the frog is always on top)
+  drawFrog();
+
+  // Check for collisions
   checkCollision();
 
   // Update lane positions (cars moving horizontally)
@@ -113,6 +112,7 @@ function draw() {
     }
   });
 
+  // Request the next frame to keep the game loop running
   requestAnimationFrame(draw);
 }
 
